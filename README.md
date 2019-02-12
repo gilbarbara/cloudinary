@@ -1,5 +1,7 @@
 # @gilbarbara/cloudinary
 
+[![npm version](https://badge.fury.io/js/%40gilbarbara%2Fcloudinary.svg)](https://badge.fury.io/js/%40gilbarbara%2Fcloudinary) [![](https://travis-ci.org/gilbarbara/cloudinary.svg)](https://travis-ci.org/gilbarbara/cloudinary) [![Maintainability](https://api.codeclimate.com/v1/badges/ba7007a43b336d951d7a/maintainability)](https://codeclimate.com/github/gilbarbara/cloudinary/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/ba7007a43b336d951d7a/test_coverage)](https://codeclimate.com/github/gilbarbara/cloudinary/test_coverage)
+
 [Cloudinary](http://cloudinary.com/) is a cloud service that offers a solution to a web application's entire image management pipeline. For client-side image management Cloudinary provides the `cloudinary-core` library for conveniently compiling transform options to asset URLs. The problem is that it's a _massive library_ often used to simply convert an object of properties to a string.
 
 Reviewing the Webpack bundle analyzer plugin output shows that if the `cloudinary-core` library is unwittingly included with the default `import cloudinary from 'cloudinary-core'`it includes a bundled copy of `lodash` as well for a combined parsed size of 114 KB and 38 KB gzipped. The proposed solution is to import `cloudinary-core/cloudinary-core-shrinkwrap`which does not bundle the entire `lodash` library, but it is still 62 KB and 20 KB gzipped.
