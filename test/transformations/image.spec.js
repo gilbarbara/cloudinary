@@ -6,14 +6,17 @@ describe('Image Transformations', () => {
       expect(imageTransformations('angle', 90)).toBe('a_90');
       expect(imageTransformations('angle', -20)).toBe('a_-20');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('angle', '10')).toBe('a_10');
       expect(imageTransformations('angle', '-20')).toBe('a_-20');
     });
+
     it('accepts valid modes', () => {
       expect(imageTransformations('angle', 'auto_right')).toBe('a_auto_right');
       expect(imageTransformations('angle', 'vflip')).toBe('a_vflip');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('angle', 'bad')).toThrowErrorMatchingSnapshot();
     });
@@ -23,10 +26,12 @@ describe('Image Transformations', () => {
     it('accepts a number', () => {
       expect(imageTransformations('aspectRatio', 1.5)).toBe('ar_1.5');
     });
+
     it('accepts valid string values', () => {
       expect(imageTransformations('aspectRatio', '1.5')).toBe('ar_1.5');
       expect(imageTransformations('aspectRatio', '16:9')).toBe('ar_16:9');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('aspectRatio', 'bad')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('aspectRatio', '7:')).toThrowErrorMatchingSnapshot();
@@ -41,12 +46,14 @@ describe('Image Transformations', () => {
       expect(imageTransformations('background', 'rgb:3020ff')).toBe('b_rgb:3020ff');
       expect(imageTransformations('background', 'rgb:3020ff22')).toBe('b_rgb:3020ff22');
     });
+
     it('accepts valid `auto:mode` strings', () => {
       expect(imageTransformations('background', 'auto:border')).toBe('b_auto:border');
       expect(imageTransformations('background', 'auto:border_contrast')).toBe(
         'b_auto:border_contrast',
       );
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('background', 'auto:bad')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('background', '#3020f')).toThrowErrorMatchingSnapshot();
@@ -64,6 +71,7 @@ describe('Image Transformations', () => {
         'bo_4px_solid_rgb:2040faf0',
       );
     });
+
     it('accepts a object with color and optional width', () => {
       expect(imageTransformations('border', { color: 'red' })).toBe('bo_1px_solid_red');
       expect(imageTransformations('border', { color: '#3020ff' })).toBe('bo_1px_solid_rgb:3020ff');
@@ -81,6 +89,7 @@ describe('Image Transformations', () => {
         'bo_2px_solid_rgb:3020ff',
       );
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('border', 'bad')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('border', { width: 1 })).toThrowErrorMatchingSnapshot();
@@ -102,6 +111,7 @@ describe('Image Transformations', () => {
       expect(imageTransformations('color', 'rgb:2040fa')).toBe('co_rgb:2040fa');
       expect(imageTransformations('color', 'rgb:2040faf0')).toBe('co_rgb:2040faf0');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('color', '#30')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('color', '#3020f')).toThrowErrorMatchingSnapshot();
@@ -110,31 +120,12 @@ describe('Image Transformations', () => {
     });
   });
 
-  describe('colorSpace', () => {
-    it('accepts predefined values', () => {
-      expect(imageTransformations('colorSpace', 'srgb')).toBe('cs_srgb');
-      expect(imageTransformations('colorSpace', 'tinysrgb')).toBe('cs_tinysrgb');
-      expect(imageTransformations('colorSpace', 'no_cmyk')).toBe('cs_no_cmyk');
-    });
-    it('accepts `cs_icc:(public_id)` values', () => {
-      expect(imageTransformations('colorSpace', 'icc:some_id.icc')).toBe('cs_icc:some_id.icc');
-    });
-    it('throws when invalid', () => {
-      expect(() => imageTransformations('colorSpace', 'bad')).toThrowErrorMatchingSnapshot();
-      expect(() =>
-        imageTransformations('colorSpace', 'bad:some_id'),
-      ).toThrowErrorMatchingSnapshot();
-      expect(() =>
-        imageTransformations('colorSpace', 'cs_icc:no_extension'),
-      ).toThrowErrorMatchingSnapshot();
-    });
-  });
-
   describe('crop', () => {
     it('accepts valid string values', () => {
       expect(imageTransformations('crop', 'scale')).toBe('c_scale');
       expect(imageTransformations('crop', 'fill')).toBe('c_fill');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('crop', 'bad')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('crop', 300)).toThrowErrorMatchingSnapshot();
@@ -146,6 +137,7 @@ describe('Image Transformations', () => {
       expect(imageTransformations('defaultImage', 'image_1.jpg')).toBe('d_image_1.jpg');
       expect(imageTransformations('defaultImage', 'image+a-char.png')).toBe('d_image+a-char.png');
     });
+
     it('throws when invalid', () => {
       expect(() =>
         imageTransformations('defaultImage', 'noExtension'),
@@ -156,28 +148,16 @@ describe('Image Transformations', () => {
     });
   });
 
-  describe('delay', () => {
-    it('accepts a positive number', () => {
-      expect(imageTransformations('delay', 30)).toBe('dl_30');
-    });
-    it('accepts a numeric string', () => {
-      expect(imageTransformations('delay', '30')).toBe('dl_30');
-    });
-    it('throws when invalid', () => {
-      expect(() => imageTransformations('delay', 'bad')).toThrowErrorMatchingSnapshot();
-      expect(() => imageTransformations('delay', '-10')).toThrowErrorMatchingSnapshot();
-      expect(() => imageTransformations('delay', -10)).toThrowErrorMatchingSnapshot();
-    });
-  });
-
   describe('density', () => {
     it('accepts a positive number up to 300', () => {
       expect(imageTransformations('density', 10)).toBe('dn_10');
       expect(imageTransformations('density', 300)).toBe('dn_300');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('density', '20')).toBe('dn_20');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('density', 'bad')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('density', 301)).toThrowErrorMatchingSnapshot();
@@ -190,12 +170,15 @@ describe('Image Transformations', () => {
     it('accepts a positive number', () => {
       expect(imageTransformations('dpr', 3)).toBe('dpr_3');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('dpr', '2.0')).toBe('dpr_2.0');
     });
+
     it('accepts the value `auto`', () => {
       expect(imageTransformations('dpr', 'auto')).toBe('dpr_auto');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('dpr', 'bad')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('dpr', -1)).toThrowErrorMatchingSnapshot();
@@ -215,16 +198,19 @@ describe('Image Transformations', () => {
       expect(imageTransformations('flags', 'any_format')).toBe('fl_any_format');
       expect(imageTransformations('flags', 'attachment')).toBe('fl_attachment');
     });
+
     it('accepts an array of valid values', () => {
       expect(imageTransformations('flags', ['clip_evenodd', 'cutter', 'force_strip'])).toBe(
         'fl_clip_evenodd.cutter.force_strip',
       );
     });
+
     it('accepts a string of `.` separated values', () => {
       expect(imageTransformations('flags', 'layer_apply.lossy.no_overflow')).toBe(
         'fl_layer_apply.lossy.no_overflow',
       );
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('density', 'bad')).toThrowErrorMatchingSnapshot();
       expect(() =>
@@ -241,9 +227,11 @@ describe('Image Transformations', () => {
       expect(imageTransformations('fetchFormat', 'jpg')).toBe('f_jpg');
       expect(imageTransformations('fetchFormat', 'png')).toBe('f_png');
     });
+
     it('accepts `auto`', () => {
       expect(imageTransformations('fetchFormat', 'auto')).toBe('f_auto');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('fetchFormat', 'bad')).toThrowErrorMatchingSnapshot();
     });
@@ -254,12 +242,15 @@ describe('Image Transformations', () => {
       expect(imageTransformations('gravity', 'south_west')).toBe('g_south_west');
       expect(imageTransformations('gravity', 'custom:face')).toBe('g_custom:face');
     });
+
     it('accepts `auto`', () => {
       expect(imageTransformations('gravity', 'auto')).toBe('g_auto');
     });
+
     it('accepts a string starting with `auto:`', () => {
       expect(imageTransformations('gravity', 'auto:50')).toBe('g_auto:50');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('gravity', 'bad:auto')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('gravity', 'auto-bad')).toThrowErrorMatchingSnapshot();
@@ -270,9 +261,11 @@ describe('Image Transformations', () => {
     it('accepts a number', () => {
       expect(imageTransformations('height', 300)).toBe('h_300');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('height', '300')).toBe('h_300');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('height', 'bad')).toThrowErrorMatchingSnapshot();
     });
@@ -284,17 +277,21 @@ describe('Image Transformations', () => {
       expect(imageTransformations('quality', 60)).toBe('q_60');
       expect(imageTransformations('quality', 100)).toBe('q_100');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('quality', '50')).toBe('q_50');
     });
+
     it('accepts a percentage and chroma sub-sampling', () => {
       expect(imageTransformations('quality', '60:420')).toBe('q_60:420');
     });
+
     it('accepts `auto`, auto variants and `jpegmini`', () => {
       expect(imageTransformations('quality', 'auto')).toBe('q_auto');
       expect(imageTransformations('quality', 'auto:best')).toBe('q_auto:best');
       expect(imageTransformations('quality', 'jpegmini')).toBe('q_jpegmini');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('quality', 0)).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('quality', 105)).toThrowErrorMatchingSnapshot();
@@ -310,11 +307,13 @@ describe('Image Transformations', () => {
       expect(imageTransformations('opacity', 30)).toBe('o_30');
       expect(imageTransformations('opacity', 100)).toBe('o_100');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('opacity', '0')).toBe('o_0');
       expect(imageTransformations('opacity', '30')).toBe('o_30');
       expect(imageTransformations('opacity', '100')).toBe('o_100');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('opacity', -1)).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('opacity', 101)).toThrowErrorMatchingSnapshot();
@@ -333,6 +332,7 @@ describe('Image Transformations', () => {
         'l_text:default_style:Hello+World',
       );
     });
+
     it('accepts an object with `text` and a `publicId`', () => {
       expect(
         imageTransformations('overlay', {
@@ -341,6 +341,7 @@ describe('Image Transformations', () => {
         }),
       ).toBe('l_text:default_style:Hello%20World');
     });
+
     it('accepts an object with `text` and text caption options', () => {
       expect(
         imageTransformations('overlay', {
@@ -380,6 +381,7 @@ describe('Image Transformations', () => {
         }),
       ).toBe('l_text:Arial_12_left_letter_spacing_2_line_spacing_1.5:Bananas');
     });
+
     it('throws when invalid', () => {
       expect(() =>
         imageTransformations('overlay', { text: 'No fontFamily', fontSize: 12 }),
@@ -397,9 +399,11 @@ describe('Image Transformations', () => {
     it('accepts a positive number', () => {
       expect(imageTransformations('page', 3)).toBe('pg_3');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('page', '20')).toBe('pg_20');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('page', 'bad')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('page', -1)).toThrowErrorMatchingSnapshot();
@@ -411,14 +415,17 @@ describe('Image Transformations', () => {
     it('accepts a number', () => {
       expect(imageTransformations('radius', 30)).toBe('r_30');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('radius', '30')).toBe('r_30');
     });
+
     it('accepts a string of the form x[:y[:z[:u]]]', () => {
       expect(imageTransformations('radius', '20:0')).toBe('r_20:0');
       expect(imageTransformations('radius', '20:0:40')).toBe('r_20:0:40');
       expect(imageTransformations('radius', '20:0:40:40')).toBe('r_20:0:40:40');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('radius', 'bad')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('radius', '20:0:40:40:90')).toThrowErrorMatchingSnapshot();
@@ -436,6 +443,7 @@ describe('Image Transformations', () => {
         'u_text:default_style:Hello+World',
       );
     });
+
     it('accepts an object with `text` and a `publicId`', () => {
       expect(
         imageTransformations('underlay', {
@@ -444,6 +452,7 @@ describe('Image Transformations', () => {
         }),
       ).toBe('u_text:default_style:Hello%20World');
     });
+
     it('accepts an object with `text` and text caption options', () => {
       expect(
         imageTransformations('underlay', {
@@ -483,6 +492,7 @@ describe('Image Transformations', () => {
         }),
       ).toBe('u_text:Arial_12_left_letter_spacing_2_line_spacing_1.5:Bananas');
     });
+
     it('throws when invalid', () => {
       expect(() =>
         imageTransformations('underlay', { text: 'No fontFamily', fontSize: 12 }),
@@ -500,15 +510,19 @@ describe('Image Transformations', () => {
     it('accepts a number', () => {
       expect(imageTransformations('width', 300)).toBe('w_300');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('width', '300')).toBe('w_300');
     });
+
     it('accepts `auto`', () => {
       expect(imageTransformations('width', 'auto')).toBe('w_auto');
     });
+
     it('accepts a string starting with `auto:`', () => {
       expect(imageTransformations('width', 'auto:50')).toBe('w_auto:50');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('width', 'bad:auto')).toThrowErrorMatchingSnapshot();
       expect(() => imageTransformations('width', 'auto-bad')).toThrowErrorMatchingSnapshot();
@@ -519,9 +533,11 @@ describe('Image Transformations', () => {
     it('accepts a number', () => {
       expect(imageTransformations('x', 100)).toBe('x_100');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('x', '100')).toBe('x_100');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('x', 'bad')).toThrowErrorMatchingSnapshot();
     });
@@ -531,9 +547,11 @@ describe('Image Transformations', () => {
     it('accepts a number', () => {
       expect(imageTransformations('y', 100)).toBe('y_100');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('y', '100')).toBe('y_100');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('y', 'bad')).toThrowErrorMatchingSnapshot();
     });
@@ -543,9 +561,11 @@ describe('Image Transformations', () => {
     it('accepts a number', () => {
       expect(imageTransformations('zoom', 30)).toBe('z_30');
     });
+
     it('accepts a numeric string', () => {
       expect(imageTransformations('zoom', '30')).toBe('z_30');
     });
+
     it('throws when invalid', () => {
       expect(() => imageTransformations('zoom', 'bad')).toThrowErrorMatchingSnapshot();
     });
