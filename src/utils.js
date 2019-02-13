@@ -5,8 +5,8 @@ const invariantFor = type => (
   value: string,
   message: string,
   source: string = `/${
-    type === 'Image ' ? 'image_transformation_reference' : 'video_manipulation_and_delivery'
-  }#${parameter}_parameter`,
+    type === 'Image ' ? 'image_transformations' : 'video_manipulation_and_delivery'
+  }`,
 ) => {
   if (!condition) {
     const nextValue = typeof value === 'string' ? `'${value}'` : value;

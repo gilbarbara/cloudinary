@@ -154,13 +154,6 @@ const validate = {
       `${shouldBeOneOf(gravityOptions)}, 'auto', or a string starting with 'auto:'`,
     ),
   height: value => invariant(isNumber(value), 'height', value, 'should be a number'),
-  opacity: value =>
-    invariant(
-      isNumber(value) && +value >= 0 && +value <= 100,
-      'opacity',
-      value,
-      'should be a number between 0 and 100',
-    ),
   overlay: () => {},
   quality: value =>
     invariant(
@@ -230,6 +223,7 @@ export default function compileVideoParameter(parameter, value) {
 
   let nextValue = value;
 
+  // eslint-disable-next-line default-case
   switch (parameter) {
     case 'flags':
       nextValue = Array.isArray(value) ? value.join('.') : value;
@@ -238,11 +232,15 @@ export default function compileVideoParameter(parameter, value) {
     case 'overlay':
       if (typeof value === 'object') {
         let stringStyle = value.publicId;
+
         if (!stringStyle) {
+          /* istanbul ignore else */
           if (process.env.NODE_ENV !== 'production') {
             validate.textCaptionStyles(value);
           }
+
           const { letterSpacing, lineSpacing } = value;
+
           stringStyle = [
             encodeURIComponent(value.fontFamily),
             value.fontSize,
@@ -257,37 +255,41 @@ export default function compileVideoParameter(parameter, value) {
             .filter(option => option && option !== 'normal' && option !== 'none')
             .join('_');
         }
+
         nextValue = `text:${stringStyle}:${encodeURIComponent(value.text)}`;
       }
       break;
 
     case 'border':
       if (typeof nextValue === 'object') {
+        /* istanbul ignore else */
         if (process.env.NODE_ENV !== 'production') {
           validate.borderObjectColor(value);
         }
+
         if (
           typeof value.width !== 'string' ||
           value.width.substr(value.width.length - 2, 2) !== 'px'
         ) {
           nextValue.width = `${value.width || 1}px`;
         }
+
         nextValue = `${value.width}_solid_${value.color}`;
       }
       nextValue = nextValue.toLowerCase();
-    // falls through
 
+    // falls through
     case 'color':
     case 'background':
       nextValue = nextValue.replace('#', 'rgb:');
-
-    // no default
   }
 
+  /* istanbul ignore else */
   if (process.env.NODE_ENV !== 'production') {
     if (!validate[parameter]) {
       throw new Error(`Cloudinary Video :: unknown transform parameter provided: '${parameter}'`);
     }
+
     validate[parameter](nextValue);
   }
 
