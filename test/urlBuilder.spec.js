@@ -1,6 +1,6 @@
 import urlBuilder, { compile } from '../src/urlBuilder';
-import imageParameters from '../src/parameters/image';
-import videoParameters from '../src/parameters/video';
+import imageTransformations from '../src/transformations/image';
+import videoTransformations from '../src/transformations/video';
 
 describe('urlBuilder', () => {
   describe('compile', () => {
@@ -9,27 +9,31 @@ describe('urlBuilder', () => {
     });
 
     it('returns an empty string for no- or an empty transform without defaults', () => {
-      expect(compile(imageParameters)).toBe('');
-      expect(compile(imageParameters, {})).toBe('');
+      expect(compile(imageTransformations)).toBe('');
+      expect(compile(imageTransformations, {})).toBe('');
 
-      expect(compile(videoParameters)).toBe('');
-      expect(compile(videoParameters, {})).toBe('');
+      expect(compile(videoTransformations)).toBe('');
+      expect(compile(videoTransformations, {})).toBe('');
     });
 
     it('returns the default transform for no- or an empty transform', () => {
       const defaultTransform = { width: 220, crop: 'fill' };
-      expect(compile(imageParameters, undefined, defaultTransform)).toBe('');
-      expect(compile(imageParameters, {}, defaultTransform)).toBe('');
+      expect(compile(imageTransformations, undefined, defaultTransform)).toBe('');
+      expect(compile(imageTransformations, {}, defaultTransform)).toBe('');
 
-      expect(compile(videoParameters, undefined, defaultTransform)).toBe('');
-      expect(compile(videoParameters, {}, defaultTransform)).toBe('');
+      expect(compile(videoTransformations, undefined, defaultTransform)).toBe('');
+      expect(compile(videoTransformations, {}, defaultTransform)).toBe('');
     });
 
-    it('compiles a single transform with one or more parameters', () => {
-      const compiledTransform = compile(imageParameters, { width: 220, height: 140, crop: 'fill' });
+    it('compiles a single transform with one or more transformations', () => {
+      const compiledTransform = compile(imageTransformations, {
+        width: 220,
+        height: 140,
+        crop: 'fill',
+      });
       expect(compiledTransform).toBe('/w_220,h_140,c_fill');
 
-      const compiledTransformVideo = compile(videoParameters, {
+      const compiledTransformVideo = compile(videoTransformations, {
         width: 220,
         height: 140,
         crop: 'fill',
@@ -37,16 +41,16 @@ describe('urlBuilder', () => {
       expect(compiledTransformVideo).toBe('/w_220,h_140,c_fill');
     });
 
-    it('compiles a single transform, applying and overriding default parameters', () => {
+    it('compiles a single transform, applying and overriding default transformations', () => {
       const compiledTransform = compile(
-        imageParameters,
+        imageTransformations,
         { height: 140, radius: 30 },
         { width: 'auto', height: 100, crop: 'fill' },
       );
       expect(compiledTransform).toBe('/w_auto,h_140,c_fill,r_30');
 
       const compiledTransformVideo = compile(
-        videoParameters,
+        videoTransformations,
         { height: 140, radius: 30 },
         { width: 'auto', height: 100, crop: 'fill' },
       );
@@ -55,7 +59,7 @@ describe('urlBuilder', () => {
 
     it('compiles an array of transforms without applying defaults', () => {
       const compiledTransform = compile(
-        imageParameters,
+        imageTransformations,
         [
           { width: 220, height: 140, crop: 'fill' },
           {
@@ -103,7 +107,7 @@ describe('urlBuilder', () => {
       );
 
       const compiledTransformVideo = compile(
-        videoParameters,
+        videoTransformations,
         [
           { width: 220, height: 140, crop: 'fill' },
           {
@@ -159,8 +163,8 @@ describe('urlBuilder', () => {
       );
     });
 
-    it('throws on transforms with unsupported parameters', () => {
-      const cl = urlBuilder({ image: imageParameters })({ cloudName: 'demo' });
+    it('throws on transforms with unsupported transformations', () => {
+      const cl = urlBuilder({ image: imageTransformations })({ cloudName: 'demo' });
       const badResourceType = () => cl('bad', { resourceType: 'any', width: 300 });
 
       expect(badResourceType).toThrowError(/^Cloudinary :: resourceType should be one of/);
@@ -184,7 +188,7 @@ describe('urlBuilder', () => {
     });
 
     it('allows overriding the base default resource type', () => {
-      const cl = urlBuilder({ video: videoParameters }, 'video')({ cloudName: 'demo' });
+      const cl = urlBuilder({ video: videoTransformations }, 'video')({ cloudName: 'demo' });
       expect(cl('my-video', { width: 300 })).toBe(
         'https://res.cloudinary.com/demo/video/upload/w_300/v1/my-video',
       );
@@ -236,7 +240,7 @@ describe('urlBuilder', () => {
     });
 
     it('constructs simple transform urls', () => {
-      const cl = urlBuilder({ image: imageParameters })({ cloudName: 'demo' });
+      const cl = urlBuilder({ image: imageTransformations })({ cloudName: 'demo' });
       const url = cl('simple.png', { height: 140, zoom: 1.2 });
       expect(url).toBe('https://res.cloudinary.com/demo/image/upload/h_140,z_1.2/v1/simple.png');
     });
@@ -244,7 +248,7 @@ describe('urlBuilder', () => {
     const defaults = { width: 'auto', height: 100, crop: 'fill' };
 
     it('constructs simple transform urls with defaults', () => {
-      const cl = urlBuilder({ image: imageParameters })({ cloudName: 'demo', defaults });
+      const cl = urlBuilder({ image: imageTransformations })({ cloudName: 'demo', defaults });
       const url = cl('simple.png', { height: 140, zoom: 1.2 });
       expect(url).toBe(
         'https://res.cloudinary.com/demo/image/upload/w_auto,h_140,c_fill,z_1.2/v1/simple.png',
@@ -252,13 +256,13 @@ describe('urlBuilder', () => {
     });
 
     it('supports clearing defaults by passing null', () => {
-      const cl = urlBuilder({ image: imageParameters })({ cloudName: 'demo', defaults });
+      const cl = urlBuilder({ image: imageTransformations })({ cloudName: 'demo', defaults });
       const url = cl('simple.png', { width: null, height: null, zoom: 1.2 });
       expect(url).toBe('https://res.cloudinary.com/demo/image/upload/c_fill,z_1.2/v1/simple.png');
     });
 
     it('constructs complex transform urls from an array (ignoring defaults)', () => {
-      const cl = urlBuilder({ image: imageParameters })({ cloudName: 'demo', defaults });
+      const cl = urlBuilder({ image: imageTransformations })({ cloudName: 'demo', defaults });
       expect(
         cl('yellow_tulip.jpg', [
           { width: 220, height: 140, crop: 'fill' },
@@ -317,7 +321,7 @@ describe('urlBuilder', () => {
     });
 
     it('constructs simple transform urls the transform property with other options', () => {
-      const cl = urlBuilder({ video: imageParameters })({ cloudName: 'demo', defaults });
+      const cl = urlBuilder({ video: imageTransformations })({ cloudName: 'demo', defaults });
       const url = cl('yellow_tulip.mp4', {
         resourceType: 'video',
         transform: { height: 140, crop: 'scale' },
@@ -328,7 +332,7 @@ describe('urlBuilder', () => {
     });
 
     it('constructs complex transform urls the transform property with other options', () => {
-      const cl = urlBuilder({ image: imageParameters })({ cloudName: 'demo', defaults });
+      const cl = urlBuilder({ image: imageTransformations })({ cloudName: 'demo', defaults });
       const url = cl('yellow_tulip.jpg', {
         secure: false,
         transform: [
@@ -349,7 +353,7 @@ describe('urlBuilder', () => {
     });
 
     it('throws an error on an invalid parameter', () => {
-      const cl = urlBuilder({ image: imageParameters })({ cloudName: 'demo' });
+      const cl = urlBuilder({ image: imageTransformations })({ cloudName: 'demo' });
       const badUrl = () => cl('test.jpg', { width: 220, height: 140, crop: 'bad_option' });
       expect(badUrl).toThrowError(/^Cloudinary Image :: crop should be one of /);
     });
