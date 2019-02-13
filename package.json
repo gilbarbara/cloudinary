@@ -1,6 +1,6 @@
 {
   "name": "@gilbarbara/cloudinary",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A tiny alternative to cloudinary-npm for client side media transformations",
   "author": "Gil Barbara <gilbarbara@gmail.com>",
   "repository": {
