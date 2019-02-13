@@ -43,7 +43,7 @@ const urlBuilder = (parameterSets = {}, baseResourceType = 'image') => ({
     ...defaultTransform
   } = {},
 }) => {
-  process.env.NODE_ENV !== 'production' &&
+  if (process.env.NODE_ENV !== 'production') {
     invariant(
       cloudName,
       'cloudName',
@@ -51,6 +51,7 @@ const urlBuilder = (parameterSets = {}, baseResourceType = 'image') => ({
       'configuration is required',
       '/node_additional_topics#configuration_options',
     );
+  }
 
   const baseUrl = `${cname}/${cloudName}/`;
   let sub = '';
@@ -78,11 +79,10 @@ const urlBuilder = (parameterSets = {}, baseResourceType = 'image') => ({
       transformation = options;
     }
 
-    process.env.NODE_ENV !== 'production' &&
+    if (process.env.NODE_ENV !== 'production') {
       invariant(
         !transformation ||
           Object.keys(transformation).length === 0 ||
-          resourceType === 'raw' ||
           includes(resourceType, resourceTypes),
         'resourceType',
         resourceType,
@@ -93,10 +93,8 @@ const urlBuilder = (parameterSets = {}, baseResourceType = 'image') => ({
         null,
       );
 
-    process.env.NODE_ENV !== 'production' &&
       invariant(includes(type, typeOptions), 'type', type, shouldBeOneOf(typeOptions), null);
 
-    process.env.NODE_ENV !== 'production' &&
       invariant(
         !cdnSubdomain || typeof cdnSubdomain === 'function',
         'cdnSubdomain',
@@ -104,6 +102,7 @@ const urlBuilder = (parameterSets = {}, baseResourceType = 'image') => ({
         'should be a CRC function: `(string) => number`',
         null,
       );
+    }
 
     if (cdnSubdomain) {
       sub = `a${(cdnSubdomain(publicId) % 5) + 1}.`;
