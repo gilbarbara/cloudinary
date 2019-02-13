@@ -1,9 +1,9 @@
 import cloudinary from '../src/index';
 
 describe('cloudinary', () => {
-  it('exports a url builder ready for configuration', () => {
-    const cl = cloudinary({ cloudName: 'test' });
+  const cl = cloudinary({ cloudName: 'test' });
 
+  it('should exports a function ready for configuration', () => {
     const rawUrl = cl('any.file', { resourceType: 'raw' });
     expect(rawUrl).toBe('https://res.cloudinary.com/test/raw/upload/v1/any.file');
 
@@ -30,12 +30,30 @@ describe('cloudinary', () => {
     expect(videoUrl).toBe(
       'https://res.cloudinary.com/test/video/upload/h_500,c_fill/v1/simple.mp4',
     );
+  });
 
+  it('should handle errors', () => {
     expect(() =>
       cl('bad', {
         resourceType: 'any',
         width: 300,
       }),
     ).toThrowError(/^Cloudinary :: resourceType should be one of/);
+
+    expect(() =>
+      cl('bad', {
+        resourceType: 'image',
+        bit_rate: 100,
+        width: 300,
+      }),
+    ).toThrowError("Cloudinary Image :: unknown transform parameter provided: 'bit_rate'");
+
+    expect(() =>
+      cl('bad', {
+        resourceType: 'video',
+        fetchFormat: 'auto',
+        width: 300,
+      }),
+    ).toThrowError("Cloudinary Video :: unknown transform parameter provided: 'fetchFormat'");
   });
 });
