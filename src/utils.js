@@ -27,6 +27,10 @@ export const invariantVideo = invariantFor('Video ');
 export const getObjectType = (value: any): string =>
   Object.prototype.toString.call(value).slice(8, -1);
 
+export const includes = (needle: string, haystack: Array<any>) => haystack.indexOf(needle) > -1;
+export const isNumber = (value: number | string) =>
+  typeof value === 'number' || !Number.isNaN(Number(value));
+
 export const isPlainObject = (value: any): boolean => {
   let prototype;
 
@@ -38,12 +42,6 @@ export const isPlainObject = (value: any): boolean => {
   );
 };
 
-export const isNumber = (value: number | string) =>
-  typeof value === 'number' || !Number.isNaN(Number(value));
-
-export const startsWith = (needle: string, haystack: string) => haystack.indexOf(needle) === 0;
-
-export const includes = (needle: string, haystack: Array<any>) => haystack.indexOf(needle) > -1;
-
 export const shouldBeOneOf = (possibleValues: Array<string>) =>
   `should be one of ['${possibleValues.join("', '")}']`;
+export const startsWith = (needle: string, haystack: string) => haystack.indexOf(needle) === 0;
