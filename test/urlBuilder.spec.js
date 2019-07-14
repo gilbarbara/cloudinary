@@ -1,6 +1,6 @@
 import urlBuilder, { compile } from '../src/urlBuilder';
-import imageTransformations from '../src/transformations/image';
-import videoTransformations from '../src/transformations/video';
+import imageTransformations from '../src/imageTransformations';
+import videoTransformations from '../src/videoTransformations';
 
 describe('urlBuilder', () => {
   describe('compile', () => {

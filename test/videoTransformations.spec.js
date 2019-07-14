@@ -1,4 +1,4 @@
-import videoTransformations from '../../src/transformations/video';
+import videoTransformations from '../src/videoTransformations';
 
 describe('Video Transformations', () => {
   describe('angle', () => {

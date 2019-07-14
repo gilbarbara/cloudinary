@@ -1,4 +1,4 @@
-import imageTransformations from '../../src/transformations/image';
+import imageTransformations from '../src/imageTransformations';
 
 describe('Image Transformations', () => {
   describe('angle', () => {
