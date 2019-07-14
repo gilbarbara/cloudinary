@@ -43,6 +43,7 @@ const urlBuilder = (parameterSets = {}, baseResourceType = 'image') => ({
     ...defaultTransform
   } = {},
 }) => {
+  /* istanbul ignore else */
   if (process.env.NODE_ENV !== 'production') {
     invariant(
       cloudName,
@@ -79,6 +80,7 @@ const urlBuilder = (parameterSets = {}, baseResourceType = 'image') => ({
       transformation = options;
     }
 
+    /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
       invariant(
         !transformation ||
