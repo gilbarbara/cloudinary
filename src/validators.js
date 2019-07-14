@@ -194,7 +194,7 @@ const effectOptions = [
   'volume',
 ];
 
-const commonMethods = (type = 'image') => {
+const commonMethods = type => {
   const cropOptions = type === 'image' ? imageCropOptions : videoCropOptions;
   const flagOptions = type === 'image' ? imageFlagOptions : videoFlagOptions;
   const formatOptions = type === 'image' ? imageFormatOptions : videoFormatOptions;
