@@ -207,6 +207,13 @@ describe('urlBuilder', () => {
       expect(cl('something')).toBe('https://a5.res.cloudinary.com/demo/image/upload/v1/something');
     });
 
+    it('supports the privateCDN option', () => {
+      const cl = urlBuilder()({ cloudName: 'demo', privateCDN: true });
+      expect(cl('short')).toBe('https://demo-res.cloudinary.com/image/upload/v1/short');
+      expect(cl('two')).toBe('https://demo-res.cloudinary.com/image/upload/v1/two');
+      expect(cl('something')).toBe('https://demo-res.cloudinary.com/image/upload/v1/something');
+    });
+
     it('creates non-secure urls if secure is set to false', () => {
       const insecureUrl = '://res.cloudinary.com/demo/image/upload/v1/test';
       expect(urlBuilder()({ cloudName: 'demo', secure: false })('test')).toBe(`http${insecureUrl}`);

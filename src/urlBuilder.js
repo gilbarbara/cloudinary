@@ -36,6 +36,7 @@ const urlBuilder = (parameterSets = {}, baseResourceType = 'image') => ({
   cloudName,
   cdnSubdomain = false,
   cname = 'res.cloudinary.com',
+  privateCDN = false,
   secure: defaultSecure = true,
   defaults: {
     type: defaultType = 'upload',
@@ -46,7 +47,7 @@ const urlBuilder = (parameterSets = {}, baseResourceType = 'image') => ({
   /* istanbul ignore else */
   if (process.env.NODE_ENV !== 'production') {
     invariant(
-      cloudName,
+      !!cloudName,
       'cloudName',
       cloudName,
       'configuration is required',
@@ -54,8 +55,12 @@ const urlBuilder = (parameterSets = {}, baseResourceType = 'image') => ({
     );
   }
 
-  const baseUrl = `${cname}/${cloudName}/`;
+  let baseUrl = `${cname}/${cloudName}/`;
   let sub = '';
+
+  if (privateCDN) {
+    baseUrl = `${cloudName}-${cname}/`;
+  }
 
   return (src, options = {}) => {
     const {
