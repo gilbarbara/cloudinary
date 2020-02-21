@@ -108,11 +108,11 @@
   "size-limit": [
     {
       "path": "esm/*.js",
-      "limit": "3kb"
+      "limit": "5kb"
     },
     {
       "path": "lib/*.js",
-      "limit": "3kb"
+      "limit": "5kb"
     }
   ],
   "husky": {
